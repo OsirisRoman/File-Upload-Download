@@ -1,0 +1,19 @@
+.login-form {
+  max-width: 90%;
+  margin: auto;
+}
+
+.auth-title {
+  text-align: center;
+}
+
+.auth-form {
+  width: 18rem;
+  margin: auto;
+}
+
+@media (min-width: 768px) {
+  .auth-form {
+    width: 20rem;
+  }
+}

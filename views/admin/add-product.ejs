@@ -1,0 +1,24 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/form.css" />
+    <%- include('../includes/navigation.ejs') %>
+      <main>
+      <h1>ADMIN Add Product</h1>
+      <% errors.forEach(error => {%>
+        <div class="user-message user-message--error"><%= error.msg %></div><br>
+      <% }); %>
+      <form class="product-form" action="/admin/<%if(editMode){%>edit-product/<%=product._id%><%} else {%>add-product<%}%>" method="POST" id="add-product-form">
+        <div class="form-control">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+          <label for="productname">Product Name</label>
+          <input type="text" name="name" id="productname" <%if(editMode){ %>value="<%=product.name%>"<% } %> <%if(errors.find(error => error.param === 'name')){%>class="invalid"<%}%> <%if(oldValues){%>value="<%=oldValues.name%>"<%}%>/>
+          <label for="productimage">Image Url</label>
+          <input type="url" name="imageUrl" id="productimage"  <%if(editMode){ %>value="<%=product.imageUrl%>"<% } %> <%if(errors.find(error => error.param === 'imageUrl')){%>class="invalid"<%}%> <%if(oldValues){%>value="<%=oldValues.imageUrl%>"<%}%>/>
+          <label for="productdescription">Description</label>
+          <textarea Form="add-product-form" rows ="5" name="description" <%if(errors.find(error => error.param === 'description')){%>class="invalid"<%}%> > <%if(editMode){ %><%=product.description%><% } %> <%if(oldValues){%><%=oldValues.description%><%}%> </textarea>
+          <label for="productPrice">Price</label>
+          <input type="number" name="price" id="productprice" min="0" placeholder="0" step="0.01"  <%if(editMode){ %>value="<%=product.price%>"<% } %> <%if(errors.find(error => error.param === 'price')){%>class="invalid"<%}%> <%if(oldValues){%>value="<%=oldValues.price%>"<%}%>/>
+        </div>
+
+        <button type="submit"><%if(editMode){%>Update Product<%} else {%>Add Product<%}%></button>
+      </form>
+      <%- include('../includes/end.ejs') %>
