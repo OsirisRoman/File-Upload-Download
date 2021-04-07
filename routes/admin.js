@@ -1,5 +1,5 @@
 const express = require("express");
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 
 const adminController = require("../controllers/admin");
 
@@ -15,9 +15,12 @@ const descriptionValidation = body("description")
   .isLength({ min: 5 })
   .withMessage("The product description must contain at least 5 characters.");
 
-const imageValidation = body("imageUrl")
-  .isLength({ min: 1 })
-  .withMessage("The product requires an image");
+const imageValidation = body("image").custom((value, { req }) => {
+  if (!req.file) {
+    throw new Error("Attached file is not an image.");
+  }
+  return true;
+});
 
 const priceValidation = body("price").custom((value, { req }) => {
   //The following regex checks for integer or real numbers
@@ -46,7 +49,7 @@ router.post(
   isAuth,
   nameValidation,
   descriptionValidation,
-  imageValidation,
+  //imageValidation,
   priceValidation,
   adminController.postEditProduct
 );

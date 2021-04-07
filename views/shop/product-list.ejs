@@ -11,7 +11,7 @@
         </header>
         <div class="card__image" <% if(isAuthenticated) {%> onclick="location.href='/product-details'" <% } %> >
           <img
-            src="<%= product.imageUrl %>"
+            src="/<%= product.imageUrl %>"
             alt="<%= product.name %>"
           />
         </div>

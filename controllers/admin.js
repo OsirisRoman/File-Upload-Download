@@ -14,6 +14,8 @@ const getAddProduct = (req, res, next) => {
 
 const postAddProduct = (req, res, next) => {
   const errors = validationResult(req);
+  console.log(req.body);
+  const image = req.file;
 
   if (!errors.isEmpty()) {
     return res.status(422).render("admin/add-product", {
@@ -30,7 +32,11 @@ const postAddProduct = (req, res, next) => {
   //all values in req.body are strings
   //multipliying the price cast it to number
   req.body.price = Math.round(req.body.price * 100);
-  const product = new Product({ ...req.body, user: req.user._id });
+  const product = new Product({
+    ...req.body,
+    user: req.user._id,
+    imageUrl: image.path,
+  });
 
   product
     .save()
@@ -84,6 +90,10 @@ const postEditProduct = (req, res, next) => {
     });
   }
   const updatedProduct = req.body;
+  const image = req.file;
+  if (image) {
+    updatedProduct.imageUrl = image.path;
+  }
   updatedProduct.price = Math.round(updatedProduct.price * 100);
   Product.updateOne(
     { _id: req.params.productId, user: req.user._id },
