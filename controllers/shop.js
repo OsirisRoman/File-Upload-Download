@@ -1,6 +1,9 @@
 const Product = require("../models/product");
 const Order = require("../models/order");
 
+const fs = require("fs");
+const path = require("path");
+
 const getProductList = (req, res, next) => {
   Product.find()
     .then(products => {
@@ -146,6 +149,42 @@ const getUserOrders = (req, res, next) => {
     });
 };
 
+const getInvoice = (req, res, next) => {
+  const orderId = req.params.orderId;
+  Order.findById(orderId)
+    .then(order => {
+      if (!order) {
+        console.log("No order found");
+        return next(error);
+      }
+      if (order.user.toString() !== req.user._id.toString()) {
+        return next(new Error("Unauthorized!"));
+      }
+      const invoiceName = "invoice-" + orderId + ".pdf";
+      const invoicePath = path.join("data", "invoices", invoiceName);
+      fs.readFile(invoicePath, (err, data) => {
+        if (err) {
+          const error = new Error(err);
+          error.httpStatusCode = 500;
+          return next(err);
+        }
+        res.setHeader("Content-Type", "application/pdf");
+        // res.setHeader(
+        //   "Content-Disposition",
+        //   "attach; filename=" + invoiceName + ""
+        // );
+        res.setHeader(
+          "Content-Disposition",
+          "inline; filename=" + invoiceName + ""
+        );
+        res.send(data);
+      });
+    })
+    .catch(err => {
+      next(err);
+    });
+};
+
 const goToCheckout = (req, res, next) => {
   res.render("shop/checkout", {
     pageTitle: "User Cart",
@@ -186,6 +225,7 @@ module.exports = {
   postDeleteProductFromCart,
   postUserOrders,
   getUserOrders,
+  getInvoice,
   goToCheckout,
   goToHome,
   getProductDetails,
