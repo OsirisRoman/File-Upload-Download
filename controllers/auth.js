@@ -1,16 +1,16 @@
-const User = require('../models/user');
-const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
-const { validationResult } = require('express-validator');
+const User = require("../models/user");
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
+const { validationResult } = require("express-validator");
 
 const getLogin = (req, res, next) => {
   if (req.session.isLoggedIn) {
-    return res.redirect('/');
+    return res.redirect("/");
   }
-  res.render('auth/login', {
-    path: '/login',
-    pageTitle: 'Login Page',
-    errors: req.flash('error'),
+  res.render("auth/login", {
+    path: "/login",
+    pageTitle: "Login Page",
+    errors: req.flash("error"),
     oldValues: undefined,
   });
 };
@@ -19,9 +19,9 @@ const postLogin = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('auth/login', {
-      path: '/login',
-      pageTitle: 'Login Page',
+    return res.status(422).render("auth/login", {
+      path: "/login",
+      pageTitle: "Login Page",
       errors: errors.errors.map(error => ({
         param: error.param,
         msg: error.msg,
@@ -38,7 +38,7 @@ const postLogin = (req, res, next) => {
       error.httpStatusCode = 500;
       return next(error);
     }
-    res.redirect('/');
+    res.redirect("/");
   });
 };
 
@@ -50,15 +50,15 @@ const postLogout = (req, res, next) => {
       error.httpStatusCode = 500;
       return next(error);
     }
-    res.redirect('/login');
+    res.redirect("/login");
   });
 };
 
 const getSignup = (req, res, next) => {
-  res.render('auth/signup', {
-    path: '/signup',
-    pageTitle: 'Signup Page',
-    errors: req.flash('error'),
+  res.render("auth/signup", {
+    path: "/signup",
+    pageTitle: "Signup Page",
+    errors: req.flash("error"),
     oldValues: undefined,
   });
 };
@@ -67,9 +67,9 @@ const postSignup = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('auth/signup', {
-      path: '/signup',
-      pageTitle: 'Signup Page',
+    return res.status(422).render("auth/signup", {
+      path: "/signup",
+      pageTitle: "Signup Page",
       errors: errors.errors.map(error => ({
         param: error.param,
         msg: error.msg,
@@ -89,7 +89,7 @@ const postSignup = (req, res, next) => {
       });
       return user.save();
     })
-    .then(() => res.redirect('/login'))
+    .then(() => res.redirect("/login"))
     .catch(err => {
       //console.log(err);
       const error = new Error(err);
@@ -99,10 +99,10 @@ const postSignup = (req, res, next) => {
 };
 
 const getResetPassword = (req, res, next) => {
-  res.render('auth/resetPassword', {
-    path: '/reset',
-    pageTitle: 'Reset Password',
-    errors: req.flash('error'),
+  res.render("auth/resetPassword", {
+    path: "/reset",
+    pageTitle: "Reset Password",
+    errors: req.flash("error"),
     oldValues: undefined,
   });
 };
@@ -111,9 +111,9 @@ const postResetPassword = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('auth/resetPassword', {
-      path: '/reset',
-      pageTitle: 'Reset Password',
+    return res.status(422).render("auth/resetPassword", {
+      path: "/reset",
+      pageTitle: "Reset Password",
       errors: errors.errors.map(error => ({
         param: error.param,
         msg: error.msg,
@@ -124,16 +124,16 @@ const postResetPassword = (req, res, next) => {
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
       console.log(err);
-      req.flash('error', 'An error occurred during the process, please retry');
-      return res.redirect('/reset-password');
+      req.flash("error", "An error occurred during the process, please retry");
+      return res.redirect("/reset-password");
     }
-    const token = buffer.toString('hex');
+    const token = buffer.toString("hex");
     req.targetUser.resetToken = token;
     req.targetUser.resetTokenExpiration = Date.now() + 30000;
     req.targetUser.save();
     //The following link must be sent to userDoc.email using any SMTP service.
     console.log(`http://localhost:3000/update-password/${token}`);
-    res.redirect('/login');
+    res.redirect("/login");
   });
 };
 
@@ -141,9 +141,9 @@ const getUpdatePassword = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('auth/resetPassword', {
-      path: '/Reset Password',
-      pageTitle: 'Reset Password',
+    return res.status(422).render("auth/resetPassword", {
+      path: "/Reset Password",
+      pageTitle: "Reset Password",
       errors: errors.errors.map(error => ({
         param: error.param,
         msg: error.msg,
@@ -151,10 +151,10 @@ const getUpdatePassword = (req, res, next) => {
       oldValues: undefined,
     });
   }
-  res.render('auth/updatePassword', {
-    path: '/updatePassword',
-    pageTitle: 'Update Password',
-    errors: req.flash('error'),
+  res.render("auth/updatePassword", {
+    path: "/updatePassword",
+    pageTitle: "Update Password",
+    errors: req.flash("error"),
     userId: req.targetUser._id.toString(),
     oldValues: undefined,
   });
@@ -164,9 +164,9 @@ const postUpdatePassword = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('auth/updatePassword', {
-      path: '/updatePassword',
-      pageTitle: 'Update Password',
+    return res.status(422).render("auth/updatePassword", {
+      path: "/updatePassword",
+      pageTitle: "Update Password",
       errors: errors.errors.map(error => ({
         param: error.param,
         msg: error.msg,
@@ -186,7 +186,7 @@ const postUpdatePassword = (req, res, next) => {
       user.resetToken = undefined;
       user.resetTokenExpiration = undefined;
       user.save();
-      res.redirect('/login');
+      res.redirect("/login");
     })
     .catch(err => {
       //console.log(err);

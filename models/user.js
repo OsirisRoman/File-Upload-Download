@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -21,7 +21,7 @@ const userSchema = new Schema({
     {
       productId: {
         type: Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: "Product",
         required: true,
       },
       quantity: {
@@ -78,4 +78,4 @@ userSchema.methods.resetCart = function () {
   return this.save();
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

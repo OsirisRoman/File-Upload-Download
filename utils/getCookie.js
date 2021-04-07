@@ -8,7 +8,7 @@ let readCookie = (completeCookie, cookieName) => {
   // tabs or enter, neither semicolon and these characters which
   // compose the word and are not spaces, ... bla bla bla
   // can appear zero (empty value) or any number of times *.
-  let re = new RegExp('[; ]' + cookieName + '=([^\\s;]*)');
+  let re = new RegExp("[; ]" + cookieName + "=([^\\s;]*)");
   // The value returned by match() is stored in the sMatch
   // variable. If there is no matching cookie, sMatch will
   // be set to null. If there is a match, sMatch will store
@@ -19,10 +19,10 @@ let readCookie = (completeCookie, cookieName) => {
   // Since we have only one capturing group, sMatch[1] is the
   // last element in the array; it is in sMatch[1] that match()
   // puts the cookie value we want to get.
-  let sMatch = (' ' + completeCookie).match(re);
+  let sMatch = (" " + completeCookie).match(re);
 
   if (sMatch) return unescape(sMatch[1]);
-  return '';
+  return "";
 };
 
 module.exports = { readCookie };

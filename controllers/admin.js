@@ -1,13 +1,13 @@
-const Product = require('../models/product');
+const Product = require("../models/product");
 
-const { validationResult } = require('express-validator');
+const { validationResult } = require("express-validator");
 
 const getAddProduct = (req, res, next) => {
-  res.render('admin/add-product', {
-    pageTitle: 'Add Product',
-    path: '/admin/add-product',
+  res.render("admin/add-product", {
+    pageTitle: "Add Product",
+    path: "/admin/add-product",
     editMode: false,
-    errors: req.flash('error'),
+    errors: req.flash("error"),
     oldValues: undefined,
   });
 };
@@ -16,9 +16,9 @@ const postAddProduct = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('admin/add-product', {
-      path: '/add/add-product',
-      pageTitle: 'Add Product',
+    return res.status(422).render("admin/add-product", {
+      path: "/add/add-product",
+      pageTitle: "Add Product",
       editMode: false,
       errors: errors.errors.map(error => ({
         param: error.param,
@@ -35,7 +35,7 @@ const postAddProduct = (req, res, next) => {
   product
     .save()
     .then(() => {
-      res.redirect('/admin/product-list');
+      res.redirect("/admin/product-list");
     })
     .catch(err => {
       //console.log(err);
@@ -50,12 +50,12 @@ const getEditProduct = (req, res, next) => {
   Product.findById(productId)
     .then(product => {
       product.price = (product.price / 100).toFixed(2);
-      res.render('admin/add-product', {
-        pageTitle: 'Edit Product',
-        path: '/admin/edit-product',
+      res.render("admin/add-product", {
+        pageTitle: "Edit Product",
+        path: "/admin/edit-product",
         editMode: true,
         product: product,
-        errors: req.flash('error'),
+        errors: req.flash("error"),
         oldValues: undefined,
       });
     })
@@ -71,9 +71,9 @@ const postEditProduct = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('admin/add-product', {
-      path: '/admin/edit-product',
-      pageTitle: 'Edit Product',
+    return res.status(422).render("admin/add-product", {
+      path: "/admin/edit-product",
+      pageTitle: "Edit Product",
       editMode: true,
       product: { ...req.body, _id: req.params.productId },
       errors: errors.errors.map(error => ({
@@ -90,7 +90,7 @@ const postEditProduct = (req, res, next) => {
     updatedProduct
   )
     .then(() => {
-      res.redirect('/admin/product-list');
+      res.redirect("/admin/product-list");
     })
     .catch(err => {
       //console.log(err);
@@ -104,7 +104,7 @@ const postDeleteProduct = (req, res, next) => {
   const productId = req.body.productId;
   Product.deleteOne({ _id: productId, user: req.user._id })
     .then(() => {
-      res.redirect('/admin/product-list');
+      res.redirect("/admin/product-list");
     })
     .catch(err => {
       //console.log(err);
@@ -121,10 +121,10 @@ const getProductList = (req, res, next) => {
       products.forEach(product => {
         product.price = (product.price / 100).toFixed(2);
       });
-      res.render('admin/product-list', {
+      res.render("admin/product-list", {
         productList: products,
-        pageTitle: 'Admin Products',
-        path: '/admin/product-list',
+        pageTitle: "Admin Products",
+        path: "/admin/product-list",
       });
     })
     .catch(err => {

@@ -1,39 +1,39 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
-const csrf = require('csurf');
-const flash = require('connect-flash');
+const express = require("express");
+const bodyParser = require("body-parser");
+const path = require("path");
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
+const csrf = require("csurf");
+const flash = require("connect-flash");
 
-const adminRoutes = require('./routes/admin');
-const publicRoutes = require('./routes/shop');
-const authRoutes = require('./routes/auth');
-const errorControler = require('./controllers/error');
+const adminRoutes = require("./routes/admin");
+const publicRoutes = require("./routes/shop");
+const authRoutes = require("./routes/auth");
+const errorControler = require("./controllers/error");
 
-const mongoose = require('mongoose');
-const User = require('./models/user');
+const mongoose = require("mongoose");
+const User = require("./models/user");
 
 const MONGODB_URI = `mongodb+srv://${encodeURIComponent(
-  'Osiris'
+  "Osiris"
 )}:${encodeURIComponent(
-  '1724771645'
+  "1724771645"
 )}@cluster0.7jlvx.mongodb.net/shop?retryWrites=true&w=majority`;
 
 const app = express();
 const store = new MongoDBStore({
   uri: MONGODB_URI,
-  collection: 'sessions',
+  collection: "sessions",
 });
 
 const csfrProtection = csrf();
 
-app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.set("view engine", "ejs");
+app.set("views", "views");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 //session is used as a middleware because it is used
 //on every user request.
@@ -51,7 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //with laws that require permission before setting a cookie
 app.use(
   session({
-    secret: 'my secret',
+    secret: "my secret",
     resave: false,
     saveUninitialized: false,
     store,
@@ -86,19 +86,19 @@ app.use((req, res, next) => {
     });
 });
 
-app.use('/admin', adminRoutes);
+app.use("/admin", adminRoutes);
 app.use(publicRoutes);
 app.use(authRoutes);
 
-app.get('/500', errorControler.get500);
+app.get("/500", errorControler.get500);
 
 app.use(errorControler.get404);
 
 app.use((err, req, res, next) => {
   // res.redirect('/500');
-  res.status(500).render('500ServerError', {
-    pageTitle: 'Error!',
-    path: '',
+  res.status(500).render("500ServerError", {
+    pageTitle: "Error!",
+    path: "",
   });
 });
 
