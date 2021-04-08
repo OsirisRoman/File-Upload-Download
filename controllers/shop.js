@@ -6,8 +6,28 @@ const path = require("path");
 
 const PDFDocument = require("pdfkit");
 
+const Constants = require("../Constants");
+
 const getProductList = (req, res, next) => {
+  let page = +req.query.page || 1;
+  let numberOfProducts;
+
   Product.find()
+    .countDocuments()
+    .then(totalItems => {
+      numberOfProducts = totalItems;
+      if (!Number.isInteger(page)) {
+        page = Math.floor(page);
+      }
+      if (page > Math.ceil(numberOfProducts / Constants.ITEMS_PER_PAGE)) {
+        page = Math.ceil(numberOfProducts / Constants.ITEMS_PER_PAGE);
+      } else if (page < 1) {
+        page = 1;
+      }
+      return Product.find()
+        .skip((page - 1) * Constants.ITEMS_PER_PAGE)
+        .limit(Constants.ITEMS_PER_PAGE);
+    })
     .then(products => {
       products.forEach(product => {
         product.price = (product.price / 100).toFixed(2);
@@ -16,6 +36,13 @@ const getProductList = (req, res, next) => {
         productList: products,
         pageTitle: "Shop",
         path: "/product-list",
+        numberOfProducts,
+        currentPage: page,
+        hasNextPage: Constants.ITEMS_PER_PAGE * page < numberOfProducts,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(numberOfProducts / Constants.ITEMS_PER_PAGE),
       });
     })
     .catch(err => {

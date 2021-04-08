@@ -1,5 +1,5 @@
 const express = require("express");
-const { body, param } = require("express-validator");
+const { body } = require("express-validator");
 
 const adminController = require("../controllers/admin");
 
@@ -26,7 +26,7 @@ const priceValidation = body("price").custom((value, { req }) => {
   //The following regex checks for integer or real numbers
   //The string will begin and end by a number
   //The string is allowed to have just one decimal point
-  if (!/^\d+(\.?\d+)$/.test(value)) {
+  if (!/^\d+(\.?\d+)?$/.test(value)) {
     throw new Error("The product price is invalid.");
   }
   return true;

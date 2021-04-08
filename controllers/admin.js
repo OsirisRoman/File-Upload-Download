@@ -4,6 +4,8 @@ const fileHelper = require("../utils/file");
 
 const { validationResult } = require("express-validator");
 
+const Constants = require("../Constants");
+
 const getAddProduct = (req, res, next) => {
   res.render("admin/add-product", {
     pageTitle: "Add Product",
@@ -16,7 +18,6 @@ const getAddProduct = (req, res, next) => {
 
 const postAddProduct = (req, res, next) => {
   const errors = validationResult(req);
-  console.log(req.body);
   const image = req.file;
 
   if (!errors.isEmpty()) {
@@ -134,7 +135,25 @@ const postDeleteProduct = (req, res, next) => {
 };
 
 const getProductList = (req, res, next) => {
-  Product.find({ user: req.user._id })
+  let page = +req.query.page || 1;
+  let numberOfProducts;
+
+  Product.find()
+    .countDocuments()
+    .then(totalItems => {
+      numberOfProducts = totalItems;
+      if (!Number.isInteger(page)) {
+        page = Math.floor(page);
+      }
+      if (page > Math.ceil(numberOfProducts / Constants.ITEMS_PER_PAGE)) {
+        page = Math.ceil(numberOfProducts / Constants.ITEMS_PER_PAGE);
+      } else if (page < 1) {
+        page = 1;
+      }
+      return Product.find({ user: req.user._id })
+        .skip((page - 1) * Constants.ITEMS_PER_PAGE)
+        .limit(Constants.ITEMS_PER_PAGE);
+    })
     //Product.find()
     .then(products => {
       products.forEach(product => {
@@ -144,6 +163,13 @@ const getProductList = (req, res, next) => {
         productList: products,
         pageTitle: "Admin Products",
         path: "/admin/product-list",
+        numberOfProducts,
+        currentPage: page,
+        hasNextPage: Constants.ITEMS_PER_PAGE * page < numberOfProducts,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(numberOfProducts / Constants.ITEMS_PER_PAGE),
       });
     })
     .catch(err => {
