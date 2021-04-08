@@ -1,5 +1,7 @@
 const Product = require("../models/product");
 
+const fileHelper = require("../utils/file");
+
 const { validationResult } = require("express-validator");
 
 const getAddProduct = (req, res, next) => {
@@ -92,6 +94,9 @@ const postEditProduct = (req, res, next) => {
   const updatedProduct = req.body;
   const image = req.file;
   if (image) {
+    Product.findById(req.params.productId).then(product => {
+      fileHelper.deleteFile(product.imageUrl);
+    });
     updatedProduct.imageUrl = image.path;
   }
   updatedProduct.price = Math.round(updatedProduct.price * 100);
@@ -112,7 +117,11 @@ const postEditProduct = (req, res, next) => {
 
 const postDeleteProduct = (req, res, next) => {
   const productId = req.body.productId;
-  Product.deleteOne({ _id: productId, user: req.user._id })
+  Product.findById(req.body.productId)
+    .then(product => {
+      fileHelper.deleteFile(product.imageUrl);
+      return Product.deleteOne({ _id: productId, user: req.user._id });
+    })
     .then(() => {
       res.redirect("/admin/product-list");
     })
