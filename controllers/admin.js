@@ -116,15 +116,18 @@ const postEditProduct = (req, res, next) => {
     });
 };
 
-const postDeleteProduct = (req, res, next) => {
-  const productId = req.body.productId;
-  Product.findById(req.body.productId)
+const deleteProduct = (req, res, next) => {
+  const productId = req.params.productId;
+  Product.findById(productId)
     .then(product => {
       fileHelper.deleteFile(product.imageUrl);
-      return Product.deleteOne({ _id: productId, user: req.user._id });
+      return Product.deleteOne({
+        _id: productId,
+        user: req.user._id,
+      });
     })
     .then(() => {
-      res.redirect("/admin/product-list");
+      res.status(200).json({ message: "Success!" });
     })
     .catch(err => {
       //console.log(err);
@@ -185,6 +188,6 @@ module.exports = {
   postAddProduct,
   getEditProduct,
   postEditProduct,
-  postDeleteProduct,
+  deleteProduct,
   getProductList,
 };
