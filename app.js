@@ -15,11 +15,16 @@ const errorControler = require("./controllers/error");
 const mongoose = require("mongoose");
 const User = require("./models/user");
 
+require("dotenv").config();
+const MONGO_USER = process.env.MONGO_USER;
+const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
+const MONGO_DATABASE = process.env.MONGO_DATABASE;
+
 const MONGODB_URI = `mongodb+srv://${encodeURIComponent(
-  "Osiris"
+  MONGO_USER
 )}:${encodeURIComponent(
-  "1724771645"
-)}@cluster0.7jlvx.mongodb.net/shop?retryWrites=true&w=majority`;
+  MONGO_PASSWORD
+)}@cluster0.7jlvx.mongodb.net/${MONGO_DATABASE}?retryWrites=true&w=majority`;
 
 const app = express();
 const store = new MongoDBStore({
@@ -128,7 +133,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 //Replace the following url connection by your own connection.
 //Try to follow the specified format.
