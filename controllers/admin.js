@@ -148,7 +148,10 @@ const getProductList = (req, res, next) => {
       if (!Number.isInteger(page)) {
         page = Math.floor(page);
       }
-      if (page > Math.ceil(numberOfProducts / Constants.ITEMS_PER_PAGE)) {
+      if (
+        numberOfProducts > 1 &&
+        page > Math.ceil(numberOfProducts / Constants.ITEMS_PER_PAGE)
+      ) {
         page = Math.ceil(numberOfProducts / Constants.ITEMS_PER_PAGE);
       } else if (page < 1) {
         page = 1;

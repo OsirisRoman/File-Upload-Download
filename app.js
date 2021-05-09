@@ -20,15 +20,8 @@ const mongoose = require("mongoose");
 const User = require("./models/user");
 
 require("dotenv").config();
-const MONGO_USER = process.env.MONGO_USER;
-const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
-const MONGO_DATABASE = process.env.MONGO_DATABASE;
 
-const MONGODB_URI = `mongodb+srv://${encodeURIComponent(
-  MONGO_USER
-)}:${encodeURIComponent(
-  MONGO_PASSWORD
-)}@cluster0.7jlvx.mongodb.net/${MONGO_DATABASE}?retryWrites=true&w=majority`;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/shop";
 
 const app = express();
 const store = new MongoDBStore({
@@ -139,6 +132,7 @@ app.get("/500", errorControler.get500);
 app.use(errorControler.get404);
 
 app.use((err, req, res, next) => {
+  //console.log(err);
   // res.redirect('/500');
   res.status(500).render("500ServerError", {
     pageTitle: "Error!",
