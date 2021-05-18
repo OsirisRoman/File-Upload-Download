@@ -1,11 +1,11 @@
 const fs = require("fs");
 
 const deleteFile = filePath => {
-  fs.unlink(filePath, err => {
-    if (err) {
-      throw err;
-    }
-  });
+  try {
+    fs.unlink(filePath);
+  } catch (error) {
+    console.log(`${filePath} do not exist`);
+  }
 };
 
 module.exports = {
