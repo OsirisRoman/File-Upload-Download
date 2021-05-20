@@ -92,6 +92,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store,
+    cookie: {
+      maxAge: 3600000 * 5,
+    },
   })
 );
 
@@ -132,7 +135,7 @@ app.get("/500", errorControler.get500);
 app.use(errorControler.get404);
 
 app.use((err, req, res, next) => {
-  //console.log(err);
+  console.log(err);
   // res.redirect('/500');
   res.status(500).render("500ServerError", {
     pageTitle: "Error!",

@@ -2,38 +2,40 @@
     <link rel="stylesheet" href="/css/product.css" />
   <%- include('../includes/navigation.ejs') %>
     <main>
-    <% if(productList.length > 0) { %>
-    <div class="grid">
-      <% for (let product of productList){ %>
-      <article class="card product-item">
-        <header class="card__header">
-          <h1 class="product__title"><%= product.name %></h1>
-        </header>
-        <div class="card__image" onclick="location.href='/product-details'">
-          <img
-            src="/<%= product.imageUrl %>"
-            alt="<%= product.name %>"
-          />
-        </div>
-        <div class="card__content">
-          <h2 class="product__price">$<%= product.price %></h2>
-          <p class="product__description">
-            <%= product.description %>
-          </p>
-        </div>
-        <div class="card__actions">
-          <a class="btn" href="/admin/edit-product/<%= product._id %>">Edit</a>
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
-          <input type="hidden" value="<%= product._id %>" name="productId" />
-          <button type="button" class="btn">Delete</button>
-        </div>
-      </article>
+      <% if(productList.length === 0) { %>
+        <h1>No products added yet...</h1>
       <% } %>
-    </div>
-    <%- include('../includes/pagination.ejs', {currentPage, hasPreviousPage, previousPage, hasNextPage, nextPage, lastPage}) %>
-    <% } else { %>
-    <h1>No products added yet...</h1>
-    <% } %>
+      <h3 class="card__actions">*Only the products created using your account will appear here to be edited or removed</h3>
+      <% if(productList.length > 0) { %>
+      <div class="grid">
+        <% for (let product of productList){ %>
+        <article class="card product-item">
+          <header class="card__header">
+            <h1 class="product__title"><%= product.name %></h1>
+          </header>
+          <div class="card__image" onclick="location.href='/product-details'">
+            <img
+              src="/<%= product.imageUrl %>"
+              alt="<%= product.name %>"
+            />
+          </div>
+          <div class="card__content">
+            <h2 class="product__price">$<%= product.price %></h2>
+            <p class="product__description">
+              <%= product.description %>
+            </p>
+          </div>
+          <div class="card__actions">
+            <a class="btn" href="/admin/edit-product/<%= product._id %>">Edit</a>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+            <input type="hidden" value="<%= product._id %>" name="productId" />
+            <button type="button" class="btn">Delete</button>
+          </div>
+        </article>
+        <% } %>
+      </div>
+      <%- include('../includes/pagination.ejs', {currentPage, hasPreviousPage, previousPage, hasNextPage, nextPage, lastPage}) %>
+      <% } %>
     </main>
     <script src="/js/deleteProduct.js"></script>    
 <%- include('../includes/end.ejs') %>

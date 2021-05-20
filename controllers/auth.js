@@ -12,6 +12,7 @@ const getLogin = (req, res, next) => {
     pageTitle: "Login Page",
     errors: req.flash("error"),
     oldValues: undefined,
+    resetPasswordURL: undefined,
   });
 };
 
@@ -27,6 +28,7 @@ const postLogin = (req, res, next) => {
         msg: error.msg,
       })),
       oldValues: req.body,
+      resetPasswordURL: undefined,
     });
   }
   req.session.isLoggedIn = true;
@@ -132,8 +134,15 @@ const postResetPassword = (req, res, next) => {
     req.targetUser.resetTokenExpiration = Date.now() + 30000;
     req.targetUser.save();
     //The following link must be sent to userDoc.email using any SMTP service.
-    console.log(`http://localhost:3000/update-password/${token}`);
-    res.redirect("/login");
+    //console.log(`http://localhost:3000/update-password/${token}`);
+    res.render("auth/login", {
+      path: "/login",
+      pageTitle: "Login Page",
+      errors: req.flash("error"),
+      oldValues: undefined,
+      resetPasswordURL: `http://localhost:3000/update-password/${token}`,
+    });
+    //res.redirect("/login");
   });
 };
 

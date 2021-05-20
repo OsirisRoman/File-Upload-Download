@@ -6,6 +6,13 @@
         <main>
         <form class="login-form" action="/login" method="POST" novalidate>
             <h1 class="auth-title">Login Page</h1>
+            <%if(resetPasswordURL){%>
+              <p class="text-centered">For this project (test only) the reset password link is not sent by email.</p>
+              <p class="text-centered">The link will expire in 30 seconds</p>
+              <div class="text-centered">
+                <a href="<%=resetPasswordURL%>">Click Here To Reset Your Password</a>
+              </div>
+            <%}%>
             <% errors.forEach(error => {%>
               <div class="user-message user-message--error"><%= error.msg %></div><br>
             <% }); %>

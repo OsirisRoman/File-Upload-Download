@@ -2,8 +2,8 @@
     <link rel="stylesheet" href="/css/cart.css">
 
     <%- include('../includes/navigation.ejs') %>
-    <h1>User Cart</h1>
         <main>
+            <h1>User Cart</h1>
             <%if(products.length > 0) {%>
                 <ul class="cart__item-list">
                     <%products.forEach(product => {%>

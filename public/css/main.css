@@ -156,7 +156,7 @@ main {
 }
 
 .card {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
 }
 
 .card__header,
@@ -241,6 +241,30 @@ main {
 .pagination a.active {
   background: #00695c;
   color: white;
+}
+
+.landing {
+  display: flex;
+  justify-content: space-evenly;
+  flex-flow: wrap;
+}
+
+.info {
+  width: 20rem;
+  max-width: 95%;
+  margin: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.text-centered {
+  text-align: center;
 }
 
 @media (min-width: 768px) {

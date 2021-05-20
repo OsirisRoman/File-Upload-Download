@@ -2,7 +2,23 @@
 
     <%- include('../includes/navigation.ejs') %>
         <main>
-        <h1>User Landing Page</h1>
+            <h1 class="card__actions">Ecommerce NodeJS app 🎉.</h1>
+            <div class="landing">
+                <article class="card info">
+                    <h1 class="card__header">Description</h1>
+                    <p class="card__content m-auto">An ecommerce NodeJS app with several backend features as login/signup forms, password encryption, routes, form protection, product administration, invoice generator, file management, error handling, etc.</p>
+                </article>
+                <article class="card info">
+                    <h1 class="card__header">Credentials</h1>
+                    <div>
+                        <p>You can generate your own credentials with a fake email and password through the Signup form or use the testing credential.</p>
+                    </div>
+                    <div>
+                        <p class="card__content"><b>Username:</b> example@gmail.com</p>
+                        <p class="card__content"><b>Password:</b> 123456</p>
+                    </div>
+                </article>
+            </div>
         </main>
 
 <%- include('../includes/end.ejs') %>

@@ -1,8 +1,9 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/form.css" />
+    <link rel="stylesheet" href="/css/main.css" />
     <%- include('../includes/navigation.ejs') %>
       <main>
-      <h1>ADMIN Add Product</h1>
+      <h1 class="card__actions">ADMIN Add Product</h1>
       <% errors.forEach(error => {%>
         <div class="user-message user-message--error"><%= error.msg %></div><br>
       <% }); %>
